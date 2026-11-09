@@ -2263,6 +2263,12 @@ p {
   overflow: hidden;
 }
 
+/* 放在首屏之后当「序」用：紧接 marquee，不要多余的上边距 */
+.closing--lead {
+  margin-top: 0;
+  padding: clamp(3rem, 6vw, 5.5rem) 0;
+}
+
 .closing::before {
   content: "";
   position: absolute;
