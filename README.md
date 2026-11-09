@@ -33,7 +33,7 @@
 2. **《换气》的署名**：海报上没有演职员，我按「导演 / 剪辑」写。如果你的实际岗位还包括摄影或编剧，改 `index.html` 的 `case-2` 和简历第 02 节。
 3. **《宝岛一村》是排练阶段的导演**：文案写的是「导演（排练）／负责围读、舞台调度与灯光配合」。如果实际是正式演出或副导演，改这一条。
 4. **《她说》的成片还没有**：条目和证书都在，视频位置留白。拿到成片后放 `assets/video/`，把 `case-3` 的证书封面换成视频即可（可参考 `case-2` 的写法）。
-5. **作品集链接仍是本地地址**：简历顶部写的是 `http://localhost:8080`。部署后换成公网 URL，再重新导出一版 PDF。
+5. **已经上线**：站点在 **https://chenchenwwww.github.io/yangziyi-portfolio/**，简历顶部的作品集链接已经换成这个地址并重导了 PDF。以后换域名，要同步改 `resume.html` 第 22 行再导一次。
 
 另外：手机号与微信会公开展示，投递前想一下是否接受。
 
@@ -197,6 +197,24 @@ ffmpeg -i "D:\11月9日.mp4" `
 
 ## 上线
 
+**当前已发布到 GitHub Pages：https://chenchenwwww.github.io/yangziyi-portfolio/**
+
+- 仓库：`chenchenwwww/yangziyi-portfolio`（public）
+- 发布源：`main` 分支根目录，站点里放了 `.nojekyll`
+- `assets/video/huanqi.mp4`（15:14 正片）被 `.gitignore` 排除，只留在本地，仓库体积 51 MB
+
+改完内容后重新发布（这台机器没有 git，走 GitHub API 推）：
+
+```powershell
+cd D:\...\default-workspace
+$env:GITHUB_TOKEN="ghp_xxx"      # classic token，勾 repo 权限
+node tools\publish-pages.mjs
+```
+
+脚本是增量的：只上传内容有变的文件，没变的复用远端 blob。如果你换到一台有 git 的机器，也可以直接 `git clone` 后用普通 git 流程。
+
+下面是备选平台，想换地方时用。
+
 ### 方案 A：Netlify Drop（最快）
 
 1. 打开 https://app.netlify.com/drop
@@ -217,11 +235,11 @@ Framework Preset 选 **Other**，输出目录留空。
 
 把 `portfolio-site` 里的文件推到仓库根目录，Settings → Pages → Deploy from a branch → `main` / `root`。
 
-上线后：
+上线后（这几步已经做过，换域名或换平台时重做）：
 
-- 把 `resume.html` 里的 `localhost:8080` 换成公网地址，重新导出 PDF
-- 把 `index.html` 的 `og:image` 换成完整地址（社交平台不解析相对路径）
-- 视频约 80 MB，Netlify / Vercel / Pages 都能放；如果嫌慢，可以只保留《卧土长眠》《换气》片段和口播
+- `resume.html` 里的作品集链接已换成公网地址，PDF 已重导
+- `index.html` 的 `og:image` 和 `canonical` 已换成完整地址
+- 视频约 51 MB（已排除未引用的 15:14 正片），Pages 能放
 
 ---
 
@@ -233,8 +251,9 @@ Framework Preset 选 **Other**，输出目录留空。
 - [ ] 确认《宝岛一村》是排练还是正式演出
 - [ ] 手机上看一遍：作品标题不溢出、视频能播放、证书能横向滑动、剧照点击出大图
 - [ ] 点开每个案例，确认视频 / 证书与标题一致
-- [ ] 简历改成公网作品集链接，重新导出 PDF
-- [ ] 部署上线，得到公网链接
+- [x] 简历已换成公网作品集链接并重导 PDF（换域名时要再导一次）
+- [x] 部署上线：https://chenchenwwww.github.io/yangziyi-portfolio/
+- [ ] 用手机流量（不连 Wi-Fi）打开一次线上地址，确认在国内网络下的速度可以接受
 
 ---
 

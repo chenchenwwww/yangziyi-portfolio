@@ -128,11 +128,16 @@ ul {
 }
 
 .contact .portfolio {
-  display: inline-block;
+  display: block;
+  max-width: 70mm;
+  margin-left: auto;
   color: var(--accent);
   border-bottom: 1px solid rgba(200, 69, 42, 0.4);
   padding-bottom: 0.15mm;
   margin-bottom: 0.4mm;
+  font-size: 7.4pt;
+  line-height: 1.35;
+  word-break: break-all;
 }
 
 /* ---------- layout ---------- */
