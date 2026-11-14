@@ -243,6 +243,16 @@
       dialog.setAttribute("open", "");
     }
     document.body.style.overflow = "hidden";
+    // 案例视频平时不预加载，打开弹窗时再取元数据，避免和首页混剪抢带宽
+    var dialogVideo = dialog.querySelector("video");
+    if (dialogVideo && dialogVideo.getAttribute("preload") === "none") {
+      dialogVideo.setAttribute("preload", "metadata");
+      try {
+        dialogVideo.load();
+      } catch (error) {
+        /* 忽略 */
+      }
+    }
     try {
       if (window.history && history.replaceState) {
         history.replaceState(null, "", "#" + id);
