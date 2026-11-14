@@ -2783,6 +2783,26 @@ p {
   pointer-events: none;
 }
 
+.screen__frame.is-loading .screen__play {
+  cursor: progress;
+}
+
+.screen__frame.is-loading .screen__play-icon {
+  background: transparent;
+  border: 2px solid rgba(245, 240, 230, 0.32);
+  border-top-color: var(--paper);
+  color: transparent;
+  font-size: 0;
+  box-shadow: none;
+  animation: screenSpin 0.9s linear infinite;
+}
+
+@keyframes screenSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .screen__tag,
 .screen__time {
   position: absolute;

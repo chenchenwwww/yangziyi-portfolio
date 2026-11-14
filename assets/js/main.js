@@ -146,41 +146,66 @@
       });
   }
 
-  // 屏幕快滚到时先缓冲一小段，点播放就不用干等
-  if (screenFrame && screenVideo && "IntersectionObserver" in window) {
+  // 滚动到放映屏附近（或悬停导航的「混剪」）时提前缓冲，点播放就不用干等
+  var screenPlay = screenFrame ? screenFrame.querySelector("[data-screen-play]") : null;
+  var screenPlayLabel = screenPlay ? screenPlay.querySelector(".screen__play-label") : null;
+  var screenPlayLabelHTML = screenPlayLabel ? screenPlayLabel.innerHTML : "";
+  var screeningWarmed = false;
+
+  function warmScreening() {
+    if (!screenVideo || screeningWarmed) return;
+    if (!screenVideo.paused || screenVideo.currentTime > 0) return;
+    if (screenFrame.classList.contains("is-loading")) return;
+    screeningWarmed = true;
+    screenVideo.setAttribute("preload", "auto");
+    try {
+      screenVideo.load();
+    } catch (error) {
+      /* 忽略：部分旧浏览器不支持重复 load */
+    }
+  }
+
+  if (screenVideo) {
     var connection = navigator.connection || {};
     var slowLink =
       connection.saveData || /(^|-)2g$/.test(connection.effectiveType || "");
-    if (!slowLink) {
+
+    if (!slowLink && "IntersectionObserver" in window) {
       var warmObserver = new IntersectionObserver(
         function (entries) {
           entries.forEach(function (entry) {
             if (!entry.isIntersecting) return;
             warmObserver.disconnect();
-            if (!screenVideo.paused || screenVideo.currentTime > 0) return;
-            screenVideo.setAttribute("preload", "auto");
-            try {
-              screenVideo.load();
-            } catch (error) {
-              /* 忽略：部分旧浏览器不支持重复 load */
-            }
+            warmScreening();
           });
         },
-        { rootMargin: "400px 0px" }
+        { rootMargin: "1600px 0px" }
       );
       warmObserver.observe(screenFrame);
     }
+
+    var screeningNav = document.querySelector('a[href="#fanedit"]');
+    if (screeningNav) {
+      ["pointerenter", "focus", "touchstart"].forEach(function (type) {
+        screeningNav.addEventListener(type, warmScreening, { once: true });
+      });
+    }
+  }
+
+  function stopScreeningLoading() {
+    if (!screenFrame) return;
+    screenFrame.classList.remove("is-loading");
+    if (screenPlayLabel) screenPlayLabel.innerHTML = screenPlayLabelHTML;
   }
 
   function startScreening() {
-    if (!screenVideo) return;
+    if (!screenVideo || screenFrame.classList.contains("is-loading")) return;
     screenVideo.controls = true;
-    screenFrame.classList.add("is-playing");
+    screenFrame.classList.add("is-loading");
+    if (screenPlayLabel) screenPlayLabel.textContent = "缓冲中…";
     var attempt = screenVideo.play();
     if (attempt && typeof attempt.catch === "function") {
-      attempt.catch(function () {
-        screenFrame.classList.remove("is-playing");
-      });
+      attempt.catch(stopScreeningLoading);
     }
     // 播放键隐藏后把焦点交给视频，键盘用户还能继续操作进度条
     window.requestAnimationFrame(function () {
@@ -193,12 +218,13 @@
   }
 
   if (screenFrame && screenVideo) {
-    var screenPlay = screenFrame.querySelector("[data-screen-play]");
     if (screenPlay) screenPlay.addEventListener("click", startScreening);
-    screenVideo.addEventListener("play", function () {
+    screenVideo.addEventListener("playing", function () {
       screenVideo.controls = true;
+      stopScreeningLoading();
       screenFrame.classList.add("is-playing");
     });
+    screenVideo.addEventListener("error", stopScreeningLoading);
   }
 
   /* ---------- dialogs ---------- */
