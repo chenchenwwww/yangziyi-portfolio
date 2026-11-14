@@ -2561,3 +2561,434 @@ p {
     font-size: 0.62rem;
   }
 }
+
+/* =========================================================
+   v4 · 混剪 / 情绪重剪（《悲伤逆流成河》）
+   ========================================================= */
+
+.screenroom {
+  position: relative;
+  margin-top: clamp(0.5rem, 2vw, 1.5rem);
+  padding-block: clamp(3.5rem, 7vw, 6.5rem);
+  background: #14110d;
+  color: var(--paper);
+  overflow: hidden;
+}
+
+.screenroom::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 10% 8%, rgba(200, 69, 42, 0.2), transparent 44%),
+    radial-gradient(circle at 92% 86%, rgba(111, 122, 94, 0.16), transparent 50%);
+}
+
+.screenroom > .shell {
+  position: relative;
+}
+
+.screenroom .section__head {
+  border-bottom-color: rgba(245, 240, 230, 0.3);
+}
+
+.screenroom .section__en,
+.screenroom .section__note {
+  color: rgba(245, 240, 230, 0.55);
+}
+
+/* 片名 + 自述 */
+.reel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.34fr) minmax(0, 0.66fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+  padding-block: clamp(2.25rem, 4.5vw, 3.75rem) clamp(1.75rem, 3.5vw, 2.75rem);
+}
+
+.reel__title {
+  margin: 0;
+  max-width: 220px;
+}
+
+.reel__title img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 20px 44px rgba(0, 0, 0, 0.45));
+}
+
+.reel__title figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(245, 240, 230, 0.18);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: rgba(245, 240, 230, 0.52);
+}
+
+.reel__copy {
+  padding-top: 0.35rem;
+}
+
+.reel__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-family: var(--latin);
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #b7ae9d;
+}
+
+.reel__eyebrow::before {
+  content: "";
+  width: 34px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.reel__headline {
+  max-width: 22em;
+  margin-top: 1rem;
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3.2vw, 2.9rem);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+.reel__headline em {
+  font-style: normal;
+  color: #e2704f;
+}
+
+.reel__text {
+  max-width: 40rem;
+  margin-top: 1.15rem;
+  font-size: 0.92rem;
+  line-height: 2;
+  color: #cdc4b4;
+}
+
+.reel__facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 1.8rem 0 0;
+  border-top: 1px solid rgba(245, 240, 230, 0.18);
+}
+
+.reel__facts div {
+  padding: 0.85rem 0.9rem 0.85rem 0;
+  border-bottom: 1px solid rgba(245, 240, 230, 0.18);
+  border-left: 1px solid transparent;
+}
+
+.reel__facts div + div {
+  padding-left: 0.9rem;
+  border-left-color: rgba(245, 240, 230, 0.14);
+}
+
+.reel__facts dt {
+  font-family: var(--latin);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245, 240, 230, 0.5);
+}
+
+.reel__facts dd {
+  margin: 0.25rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #e6dfd2;
+}
+
+/* 放映屏 */
+.screen {
+  margin: 0;
+}
+
+.screen__frame {
+  position: relative;
+  aspect-ratio: 1920 / 808;
+  background: #000;
+  border: 1px solid rgba(245, 240, 230, 0.22);
+  overflow: hidden;
+}
+
+.screen__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  object-fit: cover;
+}
+
+.screen__play {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: linear-gradient(180deg, rgba(10, 9, 7, 0.04), rgba(10, 9, 7, 0.32));
+  color: var(--paper);
+  cursor: pointer;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.screen__play-icon {
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  padding-left: 5px;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1.05rem;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4);
+  transition: transform 0.4s var(--ease), background 0.3s ease, color 0.3s ease;
+}
+
+.screen__play-label {
+  font-family: var(--latin);
+  font-size: 0.64rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+}
+
+.screen__play:hover .screen__play-icon,
+.screen__play:focus-visible .screen__play-icon {
+  transform: scale(1.07);
+  background: var(--accent);
+  color: var(--paper);
+}
+
+.screen__frame.is-playing .screen__play {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.screen__tag,
+.screen__time {
+  position: absolute;
+  top: 0.9rem;
+  z-index: 1;
+  padding: 0.32rem 0.65rem;
+  border: 1px solid rgba(245, 240, 230, 0.3);
+  background: rgba(12, 10, 8, 0.55);
+  color: rgba(245, 240, 230, 0.85);
+  font-family: var(--latin);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.screen__tag {
+  left: 0.9rem;
+}
+
+.screen__time {
+  right: 0.9rem;
+}
+
+.screen__cap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  margin-top: 0.9rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: rgba(245, 240, 230, 0.5);
+}
+
+/* 剪辑笔记 */
+.reel-notes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: clamp(2.5rem, 5vw, 4rem) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(245, 240, 230, 0.18);
+}
+
+.reel-notes li {
+  padding: 1.5rem 1.6rem 0 0;
+  border-right: 1px solid rgba(245, 240, 230, 0.12);
+}
+
+.reel-notes li + li {
+  padding-left: 1.6rem;
+}
+
+.reel-notes li:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+
+.reel-notes__num {
+  font-family: var(--latin);
+  font-style: italic;
+  font-size: 0.76rem;
+  color: var(--accent);
+}
+
+.reel-notes h4 {
+  margin-top: 0.45rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.reel-notes p {
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  line-height: 1.9;
+  color: rgba(245, 240, 230, 0.58);
+}
+
+.reel__credit {
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  padding-top: 1rem;
+  border-top: 1px solid rgba(245, 240, 230, 0.12);
+  font-size: 0.7rem;
+  line-height: 1.8;
+  color: rgba(245, 240, 230, 0.48);
+}
+
+/* 案例弹窗里的宽画幅视频 */
+.case__video--wide {
+  aspect-ratio: 1920 / 808;
+}
+
+/* 一个 case__section 里放多段正文时，保持段落间距（否则第二段会掉进左栏） */
+.case__section div > p + p {
+  margin-top: 0.9rem;
+}
+
+@media (max-width: 1080px) {
+  .reel {
+    grid-template-columns: minmax(0, 0.3fr) minmax(0, 0.7fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .reel__title {
+    max-width: 205px;
+  }
+
+  .reel__facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .reel__facts div:nth-child(3) {
+    padding-left: 0;
+    border-left-color: transparent;
+  }
+}
+
+@media (max-width: 860px) {
+  .reel {
+    grid-template-columns: minmax(0, 150px) minmax(0, 1fr);
+    gap: 2rem;
+    padding-block: 2rem;
+  }
+
+  .reel__title {
+    max-width: 150px;
+  }
+
+  .reel__headline {
+    margin-top: 0.85rem;
+  }
+
+  .screen__play-icon {
+    width: 68px;
+    height: 68px;
+  }
+
+  .reel-notes {
+    grid-template-columns: 1fr;
+  }
+
+  .reel-notes li,
+  .reel-notes li + li {
+    padding: 1.25rem 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(245, 240, 230, 0.12);
+  }
+
+  .reel-notes li:last-child {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .reel {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .reel__title {
+    max-width: 150px;
+  }
+
+  .screen__play {
+    gap: 0.55rem;
+  }
+
+  .screen__play-icon {
+    width: 48px;
+    height: 48px;
+    padding-left: 3px;
+    font-size: 0.8rem;
+  }
+
+  .screen__play-en {
+    display: none;
+  }
+
+  .screen__play-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+  }
+
+  .screen__tag,
+  .screen__time {
+    top: 0.55rem;
+    font-size: 0.52rem;
+  }
+
+  .screen__tag {
+    left: 0.55rem;
+  }
+
+  .screen__time {
+    right: 0.55rem;
+  }
+
+  .screen__cap {
+    font-size: 0.66rem;
+  }
+
+  .screenroom .section__note {
+    margin-top: -0.35rem;
+  }
+}

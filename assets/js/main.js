@@ -133,6 +133,39 @@
     });
   }
 
+  /* ---------- inline screening player ---------- */
+  var screenFrame = document.querySelector("[data-screen]");
+  var screenVideo = screenFrame ? screenFrame.querySelector("video") : null;
+
+  function startScreening() {
+    if (!screenVideo) return;
+    screenVideo.controls = true;
+    screenFrame.classList.add("is-playing");
+    var attempt = screenVideo.play();
+    if (attempt && typeof attempt.catch === "function") {
+      attempt.catch(function () {
+        screenFrame.classList.remove("is-playing");
+      });
+    }
+    // 播放键隐藏后把焦点交给视频，键盘用户还能继续操作进度条
+    window.requestAnimationFrame(function () {
+      try {
+        screenVideo.focus({ preventScroll: true });
+      } catch (error) {
+        /* 老浏览器不支持 focus 选项，忽略 */
+      }
+    });
+  }
+
+  if (screenFrame && screenVideo) {
+    var screenPlay = screenFrame.querySelector("[data-screen-play]");
+    if (screenPlay) screenPlay.addEventListener("click", startScreening);
+    screenVideo.addEventListener("play", function () {
+      screenVideo.controls = true;
+      screenFrame.classList.add("is-playing");
+    });
+  }
+
   /* ---------- dialogs ---------- */
   var dialogTriggers = Array.prototype.slice.call(document.querySelectorAll("[data-dialog]"));
   var dialogs = Array.prototype.slice.call(document.querySelectorAll("dialog.case"));
@@ -141,6 +174,8 @@
     var dialog = document.getElementById(id);
     if (!dialog) return;
     hidePreview();
+    // 弹窗里播的时候，别让页面上的混剪还在出声
+    if (screenVideo && !screenVideo.paused) screenVideo.pause();
     if (typeof dialog.showModal === "function") {
       dialog.showModal();
     } else {

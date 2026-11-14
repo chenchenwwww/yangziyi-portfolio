@@ -1,17 +1,32 @@
 # 杨子毅 · 导演 / 剪辑作品集
 
-一套可以直接上线的个人网站：**作品集主页 + 海报墙 + 剧照墙 + 可在线播放的短片 + 一页 A4 简历**。
+一套可以直接上线的个人网站：**作品集主页 + 电影混剪单元 + 海报墙 + 剧照墙 + 可在线播放的短片 + 一页 A4 简历**。
 无框架、无构建步骤、无外部字体；桌面和手机端都已适配。
 
 ## 预览
 
 ![作品集主页（桌面端）](preview/home-desktop.jpg)
 
+![混剪单元：片名页](preview/fanedit.jpg)
+
+![混剪单元：放映屏与剪辑笔记](preview/fanedit-player.jpg)
+
 ![海报墙](preview/posters.jpg)
 
 <img src="preview/home-mobile.jpg" width="300" alt="作品集主页（手机端）">
 <img src="preview/stills.jpg" width="420" alt="剧照与现场">
 <img src="preview/resume.jpg" width="520" alt="一页简历">
+
+---
+
+## 这一版改了什么（v4）
+
+1. **新增「混剪 / 情绪重剪」整块**：独立的 `02` 区块，深色放映厅样式，不塞进作品列表里草草了事。片名题字、55 秒混剪、剪辑笔记（选段 / 节奏 / 并置）和版权说明都在这一块内。
+2. **视频上线**：`D:\作品\11月12日.mp4`（2566×1080 / 120fps / 140 MB）压成 `assets/video/sad-river.mp4`（1920×808 / 30fps / 21 MB / faststart）。2.39 : 1 画幅按原比例放映，不裁切。
+3. **作品列表加第 09 条**，可直接打开案例 09；首屏文案、跑马灯、技能、关于、统计数字（9 部作品 / 5 条可播放）都同步改了。
+4. **导航加「混剪」**，原来的 02–07 顺延为 03–08：01 作品 / 02 混剪 / 03 海报 / 04 剧照 / 05 荣誉 / 06 经历 / 07 能力 / 08 关于。
+5. **修了案例弹窗里第二段正文掉进左栏的问题**（`case-9` 和原本就有问题的 `case-2`）。
+6. 混剪卡片、区块和案例都在显眼位置写明：**非官方物料，版权归原片方，仅作练习与展示**。
 
 ---
 
@@ -67,7 +82,7 @@ python -m http.server 8080
 
 ```
 portfolio-site/
-├─ index.html                 作品集主页：首屏 / 序（我还在学）/ 作品 / 海报 / 剧照 / 荣誉 / 经历 / 能力 / 关于 / 联系
+├─ index.html                 作品集主页：首屏 / 序（我还在学）/ 作品 / 混剪 / 海报 / 剧照 / 荣誉 / 经历 / 能力 / 关于 / 联系
 ├─ resume.html                一页简历，可打印为 PDF
 ├─ 杨子毅-简历.pdf            已导出的单页 PDF（2026.11 版）
 ├─ serve.mjs                  本地预览服务（支持视频拖动）
@@ -78,11 +93,13 @@ portfolio-site/
    │  ├─ style.css            主页样式；顶部 :root 改配色，底部 v3 区块是海报/剧照/「我还在学」/灯箱
    │  └─ resume.css           简历样式 + A4 打印规则
    ├─ js/
-   │  └─ main.js              滚动动效、作品预览、案例弹窗、视频切换、剧照灯箱、时钟
+   │  └─ main.js              滚动动效、作品预览、案例弹窗、屏幕内播放器、剧照灯箱、时钟
    ├─ img/
    │  ├─ keyart-wotu.jpg      首屏与海报墙：《卧土长眠》竖版海报 480×720
    │  ├─ keyart-huanqi.jpg    海报墙：《换气》海报 720×697
-   │  ├─ poster-*.jpg         视频播放器封面（16:9，换气 / 卧土 / AI / 口播）
+   │  ├─ sadriver-title-white.png  混剪单元片名题字（竖版，带透明通道）
+   │  ├─ poster-sadriver.jpg  混剪放映屏封面 1920×808（2.39 : 1）
+   │  ├─ poster-*.jpg         其它播放器封面（16:9，换气 / 卧土 / AI / 口播）
    │  ├─ still-*.jpg          剧照：宝岛一村 ×2、片场 ×5、影展 ×1
    │  ├─ cert-*.jpg           3 张证书
    │  ├─ award-stage.jpg      帧实影展映后合影
@@ -91,14 +108,15 @@ portfolio-site/
    │  ├─ og-cover.jpg         社交分享图（1200 × 630）
    │  └─ favicon.svg
    └─ video/
+      ├─ sad-river.mp4       《悲伤逆流成河》混剪 00:55，21 MB（1920×808）
       ├─ wotu.mp4            《卧土长眠》04:03，22 MB
       ├─ huanqi-clip.mp4     《换气》展示片段 01:38，12 MB
-      ├─ huanqi.mp4          《换气》正片 15:14，29 MB（当前页面未引用）
+      ├─ huanqi.mp4          《换气》正片 15:14，29 MB（当前页面未引用，也不发布）
       ├─ ai-film.mp4         AI 短片 01:25，10 MB
       └─ koubo.mp4           口播剪辑案例 46s，5 MB
 ```
 
-站点总体积约 80 MB，主要是五段视频。原片仍在 `D:\` 根目录与 `D:\兼职剪辑\`，这里放的是压缩后的网页版本。
+站点文件夹约 101 MB（含未发布的 `huanqi.mp4`）；实际发布约 72 MB，其中五段视频占 69 MB。原片仍在 `D:\` 与 `D:\作品\`，这里放的是压缩后的网页版本。
 
 ---
 
@@ -106,8 +124,9 @@ portfolio-site/
 
 ### 1. 作品与案例
 
-- `index.html` → `#works`：8 行作品的标题、标签、奖项、`data-preview`
-- `index.html` → 8 个 `<dialog class="case">`：每个案例的背景 / 动作 / 结果 / 复盘
+- `index.html` → `#works`：9 行作品的标题、标签、奖项、`data-preview`
+- `index.html` → `#fanedit`：混剪单元（片名题字、自述、放映屏、剪辑笔记、版权说明）
+- `index.html` → 9 个 `<dialog class="case">`：每个案例的背景 / 动作 / 结果 / 复盘
 - `index.html` → `#posters`：两张海报与说明
 - `index.html` → `#stills`：剧照分组、`data-cap`（悬停与灯箱里的说明）
 - `index.html` → `#honors`：荣誉清单、证书图片与说明
@@ -121,6 +140,7 @@ portfolio-site/
 
 | 文件 | 对应作品 | 建议 |
 | --- | --- | --- |
+| `sad-river.mp4` | 《悲伤逆流成河》混剪 00:55 | 1920×808 / 2.39 : 1 / H.264 / AAC / faststart |
 | `wotu.mp4` | 《卧土长眠》 | 1280×720 / H.264 / AAC / faststart |
 | `huanqi-clip.mp4` | 《换气》页面展示片段 01:38 | 1280×720 / H.264 / AAC |
 | `huanqi.mp4` | 《换气》正片 15:14（当前页面未引用） | 848×480 / H.264 / AAC / faststart |
@@ -129,7 +149,7 @@ portfolio-site/
 
 《换气》现在直接播 `huanqi-clip.mp4`。想恢复「正片 / 片段」切换的话：把 `case-2` 的 `<video>` 换成带 `data-video-box` 的写法，再加回 `vswitch` 那组按钮（`main.js` 里的切换逻辑还在，按钮上写 `data-vsrc` 与 `data-vnote` 即可）。
 
-**部署前如果确定不需要正片**，可以删掉 `assets/video/huanqi.mp4`，站点从约 80 MB 降到约 50 MB。
+**部署前如果确定不需要正片**，可以删掉 `assets/video/huanqi.mp4`，本地文件夹从约 101 MB 降到约 72 MB。
 
 压缩命令示例（需要本机装 ffmpeg）：
 
@@ -140,12 +160,22 @@ ffmpeg -i "D:\11月9日.mp4" `
   -c:a aac -b:a 128k -movflags +faststart assets/video/huanqi-clip.mp4
 ```
 
+混剪这条按原画幅压，不裁切（源文件 2566×1080 / 120fps）：
+
+```powershell
+ffmpeg -i "D:\作品\11月12日.mp4" `
+  -vf "scale=1920:808:flags=lanczos,fps=30" `
+  -c:v libx264 -preset slow -crf 22 -profile:v high -level 4.1 -pix_fmt yuv420p `
+  -c:a aac -b:a 160k -movflags +faststart assets/video/sad-river.mp4
+```
+
 ### 3. 图片
 
 | 位置 | 建议 |
 | --- | --- |
 | 首屏 / 海报墙 | 竖版 2:3，`keyart-wotu.jpg`、`keyart-huanqi.jpg` |
 | 播放器封面 | 16:9，1280×720；`poster-*.jpg` |
+| 混剪放映屏封面 | 2.39 : 1，1920×808；`poster-sadriver.jpg` |
 | 剧照 | 任意比例，页面上统一裁成 4:3 方块，点击看原图 |
 | 证书 | 保持原图比例；`cert-*.jpg` 已做透视矫正 |
 | 人像 | 400×400；`headshot.jpg` |
@@ -201,7 +231,7 @@ ffmpeg -i "D:\11月9日.mp4" `
 
 - 仓库：`chenchenwwww/yangziyi-portfolio`（public）
 - 发布源：`main` 分支根目录，站点里放了 `.nojekyll`
-- `assets/video/huanqi.mp4`（15:14 正片）被 `.gitignore` 排除，只留在本地，仓库体积 51 MB
+- `assets/video/huanqi.mp4`（15:14 正片）被 `.gitignore` 排除，只留在本地，仓库体积约 72 MB
 
 改完内容后重新发布（这台机器没有 git，走 GitHub API 推）：
 
@@ -239,7 +269,7 @@ Framework Preset 选 **Other**，输出目录留空。
 
 - `resume.html` 里的作品集链接已换成公网地址，PDF 已重导
 - `index.html` 的 `og:image` 和 `canonical` 已换成完整地址
-- 视频约 51 MB（已排除未引用的 15:14 正片），Pages 能放
+- 视频约 72 MB（已排除未引用的 15:14 正片），Pages 能放
 
 ---
 
@@ -250,6 +280,8 @@ Framework Preset 选 **Other**，输出目录留空。
 - [ ] 确认《换气》页面上只放片段、并写明「片段」——如果想让访客看完整正片，再二选一
 - [ ] 确认《宝岛一村》是排练还是正式演出
 - [ ] 手机上看一遍：作品标题不溢出、视频能播放、证书能横向滑动、剧照点击出大图
+- [ ] 手机上看一遍混剪：横屏全屏后画幅是否完整、2.39 : 1 的字幕是否被控制条挡住
+- [ ] 确认混剪的版权说明仍然保留（非官方物料 / 仅作练习与展示）
 - [ ] 点开每个案例，确认视频 / 证书与标题一致
 - [x] 简历已换成公网作品集链接并重导 PDF（换域名时要再导一次）
 - [x] 部署上线：https://chenchenwwww.github.io/yangziyi-portfolio/
@@ -260,6 +292,8 @@ Framework Preset 选 **Other**，输出目录留空。
 ## 素材说明
 
 - 原简历：`D:\杨子毅简历.pdf`
-- 视频：`D:\10月9日.mp4`（AI 短片）、`D:\11月9日.mp4`（换气片段）、`D:\兼职剪辑\11月6日.mp4`（卧土）、`D:\兼职剪辑\杨子毅分享的视频_成片.mp4`（换气正片）、口播成片
+- 视频：`D:\作品\11月12日.mp4`（《悲伤逆流成河》混剪）、`D:\10月9日.mp4`（AI 短片）、`D:\11月9日.mp4`（换气片段）、`D:\兼职剪辑\11月6日.mp4`（卧土）、`D:\兼职剪辑\杨子毅分享的视频_成片.mp4`（换气正片）、口播成片
+- 混剪片名题字：`sad-river-font/` 里的透明 PNG（由海报风格重绘），页面上用的是白字版
+- 混剪片源为电影《悲伤逆流成河》（2018，导演 落落）；页面已注明非官方、非商业
 - 海报与剧照来自你提供的图片（换气海报、卧土海报、宝岛一村排练、片场、杀青、影展）
 - 案例文字根据简历、证书、视频画面与现场照片整理；如果和你的实际创作过程有出入，直接改文案即可
