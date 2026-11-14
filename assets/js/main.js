@@ -167,10 +167,10 @@
 
   if (screenVideo) {
     var connection = navigator.connection || {};
-    var slowLink =
+    var lowBandwidth =
       connection.saveData || /(^|-)2g$/.test(connection.effectiveType || "");
 
-    if (!slowLink && "IntersectionObserver" in window) {
+    if (!lowBandwidth && "IntersectionObserver" in window) {
       var warmObserver = new IntersectionObserver(
         function (entries) {
           entries.forEach(function (entry) {
@@ -182,6 +182,18 @@
         { rootMargin: "1600px 0px" }
       );
       warmObserver.observe(screenFrame);
+    }
+
+    // 桌面端页面资源加载完后在后台先缓冲，用户滚到放映屏时基本已经就绪
+    if (!lowBandwidth && window.matchMedia("(min-width: 641px)").matches) {
+      var startDesktopWarm = function () {
+        window.setTimeout(warmScreening, 800);
+      };
+      if (document.readyState === "complete") {
+        startDesktopWarm();
+      } else {
+        window.addEventListener("load", startDesktopWarm);
+      }
     }
 
     var screeningNav = document.querySelector('a[href="#fanedit"]');
