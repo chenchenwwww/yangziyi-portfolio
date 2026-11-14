@@ -362,10 +362,11 @@
 
         <figure class="screen">
           <div class="screen__frame" data-screen>
-            <video class="screen__video" preload="none" playsinline width="1920" height="808" tabindex="0"
+            <video class="screen__video" preload="metadata" playsinline width="1280" height="538" tabindex="0"
                    aria-label="《悲伤逆流成河》电影混剪，时长 55 秒"
+                   data-mobile-src="assets/video/sad-river-mobile.mp4?v=1"
                    poster="assets/img/poster-sadriver.jpg">
-              <source src="assets/video/sad-river.mp4" type="video/mp4">
+              <source src="assets/video/sad-river.mp4?v=2" type="video/mp4">
               你的浏览器不支持 HTML5 视频，可<a href="assets/video/sad-river.mp4">下载观看</a>。
             </video>
             <button class="screen__play" type="button" data-screen-play>
@@ -1172,8 +1173,9 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m6 6 12 12M18 6 6 18"/></svg>
     </button>
     <div class="case__video case__video--wide">
-      <video controls preload="metadata" playsinline poster="assets/img/poster-sadriver.jpg">
-        <source src="assets/video/sad-river.mp4" type="video/mp4">
+      <video controls preload="metadata" playsinline poster="assets/img/poster-sadriver.jpg"
+             data-mobile-src="assets/video/sad-river-mobile.mp4?v=1">
+        <source src="assets/video/sad-river.mp4?v=2" type="video/mp4">
         你的浏览器不支持 HTML5 视频，可<a href="assets/video/sad-river.mp4">下载观看</a>。
       </video>
     </div>

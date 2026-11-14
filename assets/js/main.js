@@ -137,6 +137,41 @@
   var screenFrame = document.querySelector("[data-screen]");
   var screenVideo = screenFrame ? screenFrame.querySelector("video") : null;
 
+  // 手机上换更小的片源，首次播放快很多
+  if (window.matchMedia("(max-width: 640px)").matches) {
+    Array.prototype.slice
+      .call(document.querySelectorAll("video[data-mobile-src]"))
+      .forEach(function (video) {
+        video.setAttribute("src", video.getAttribute("data-mobile-src"));
+      });
+  }
+
+  // 屏幕快滚到时先缓冲一小段，点播放就不用干等
+  if (screenFrame && screenVideo && "IntersectionObserver" in window) {
+    var connection = navigator.connection || {};
+    var slowLink =
+      connection.saveData || /(^|-)2g$/.test(connection.effectiveType || "");
+    if (!slowLink) {
+      var warmObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            warmObserver.disconnect();
+            if (!screenVideo.paused || screenVideo.currentTime > 0) return;
+            screenVideo.setAttribute("preload", "auto");
+            try {
+              screenVideo.load();
+            } catch (error) {
+              /* 忽略：部分旧浏览器不支持重复 load */
+            }
+          });
+        },
+        { rootMargin: "400px 0px" }
+      );
+      warmObserver.observe(screenFrame);
+    }
+  }
+
   function startScreening() {
     if (!screenVideo) return;
     screenVideo.controls = true;

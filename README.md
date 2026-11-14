@@ -22,7 +22,7 @@
 ## 这一版改了什么（v4）
 
 1. **新增「混剪 / 情绪重剪」整块**：独立的 `02` 区块，深色放映厅样式，不塞进作品列表里草草了事。片名题字、55 秒混剪、剪辑笔记（选段 / 节奏 / 并置）和版权说明都在这一块内。
-2. **视频上线**：`D:\作品\11月12日.mp4`（2566×1080 / 120fps / 140 MB）压成 `assets/video/sad-river.mp4`（1920×808 / 30fps / 21 MB / faststart）。2.39 : 1 画幅按原比例放映，不裁切。
+2. **视频上线**：`D:\作品\11月12日.mp4`（2566×1080 / 120fps / 140 MB）压成 `assets/video/sad-river.mp4`（1280×538 / 30fps / 5.6 MB / faststart），手机端另有一条 `sad-river-mobile.mp4`（960×404 / 4.1 MB）。2.39 : 1 画幅按原比例放映，不裁切；页面滚到放映屏附近才预缓冲，点播放基本不用等。
 3. **作品列表加第 09 条**，可直接打开案例 09；首屏文案、跑马灯、技能、关于、统计数字（9 部作品 / 5 条可播放）都同步改了。
 4. **导航加「混剪」**，原来的 02–07 顺延为 03–08：01 作品 / 02 混剪 / 03 海报 / 04 剧照 / 05 荣誉 / 06 经历 / 07 能力 / 08 关于。
 5. **修了案例弹窗里第二段正文掉进左栏的问题**（`case-9` 和原本就有问题的 `case-2`）。
@@ -108,7 +108,8 @@ portfolio-site/
    │  ├─ og-cover.jpg         社交分享图（1200 × 630）
    │  └─ favicon.svg
    └─ video/
-      ├─ sad-river.mp4       《悲伤逆流成河》混剪 00:55，21 MB（1920×808）
+      ├─ sad-river.mp4       《悲伤逆流成河》混剪 00:55，5.6 MB（1280×538）
+      ├─ sad-river-mobile.mp4  同上，手机端 00:55，4.1 MB（960×404）
       ├─ wotu.mp4            《卧土长眠》04:03，22 MB
       ├─ huanqi-clip.mp4     《换气》展示片段 01:38，12 MB
       ├─ huanqi.mp4          《换气》正片 15:14，29 MB（当前页面未引用，也不发布）
@@ -116,7 +117,7 @@ portfolio-site/
       └─ koubo.mp4           口播剪辑案例 46s，5 MB
 ```
 
-站点文件夹约 101 MB（含未发布的 `huanqi.mp4`）；实际发布约 72 MB，其中五段视频占 69 MB。原片仍在 `D:\` 与 `D:\作品\`，这里放的是压缩后的网页版本。
+站点文件夹约 90 MB（含未发布的 `huanqi.mp4`）；实际发布约 61 MB，其中六段视频占 58 MB。原片仍在 `D:\` 与 `D:\作品\`，这里放的是压缩后的网页版本。
 
 ---
 
@@ -140,7 +141,8 @@ portfolio-site/
 
 | 文件 | 对应作品 | 建议 |
 | --- | --- | --- |
-| `sad-river.mp4` | 《悲伤逆流成河》混剪 00:55 | 1920×808 / 2.39 : 1 / H.264 / AAC / faststart |
+| `sad-river.mp4` | 《悲伤逆流成河》混剪 00:55（桌面） | 1280×538 / 2.39 : 1 / H.264 / AAC / faststart |
+| `sad-river-mobile.mp4` | 同上（手机 ≤640px 自动切换） | 960×404 / 2.39 : 1 / H.264 / AAC / faststart |
 | `wotu.mp4` | 《卧土长眠》 | 1280×720 / H.264 / AAC / faststart |
 | `huanqi-clip.mp4` | 《换气》页面展示片段 01:38 | 1280×720 / H.264 / AAC |
 | `huanqi.mp4` | 《换气》正片 15:14（当前页面未引用） | 848×480 / H.264 / AAC / faststart |
@@ -149,7 +151,7 @@ portfolio-site/
 
 《换气》现在直接播 `huanqi-clip.mp4`。想恢复「正片 / 片段」切换的话：把 `case-2` 的 `<video>` 换成带 `data-video-box` 的写法，再加回 `vswitch` 那组按钮（`main.js` 里的切换逻辑还在，按钮上写 `data-vsrc` 与 `data-vnote` 即可）。
 
-**部署前如果确定不需要正片**，可以删掉 `assets/video/huanqi.mp4`，本地文件夹从约 101 MB 降到约 72 MB。
+**部署前如果确定不需要正片**，可以删掉 `assets/video/huanqi.mp4`，本地文件夹从约 90 MB 降到约 61 MB。
 
 压缩命令示例（需要本机装 ffmpeg）：
 
@@ -160,13 +162,22 @@ ffmpeg -i "D:\11月9日.mp4" `
   -c:a aac -b:a 128k -movflags +faststart assets/video/huanqi-clip.mp4
 ```
 
-混剪这条按原画幅压，不裁切（源文件 2566×1080 / 120fps）：
+混剪这条按原画幅压，不裁切（源文件 2566×1080 / 120fps）。为了在 GitHub Pages 这种 1–2 Mbps 的线路上也能流畅播，码率压在 0.9 Mbps 左右：
 
 ```powershell
+# 桌面 / 平板
 ffmpeg -i "D:\作品\11月12日.mp4" `
-  -vf "scale=1920:808:flags=lanczos,fps=30" `
-  -c:v libx264 -preset slow -crf 22 -profile:v high -level 4.1 -pix_fmt yuv420p `
-  -c:a aac -b:a 160k -movflags +faststart assets/video/sad-river.mp4
+  -vf "scale=1280:538:flags=lanczos,fps=30" `
+  -c:v libx264 -preset slow -crf 27 -maxrate 1000k -bufsize 2000k `
+  -profile:v high -level 4.0 -pix_fmt yuv420p `
+  -c:a aac -b:a 128k -movflags +faststart assets/video/sad-river.mp4
+
+# 手机（≤640px 自动切换）
+ffmpeg -i "D:\作品\11月12日.mp4" `
+  -vf "scale=960:404:flags=lanczos,fps=30" `
+  -c:v libx264 -preset slow -crf 26 -maxrate 700k -bufsize 1400k `
+  -profile:v high -level 3.1 -pix_fmt yuv420p `
+  -c:a aac -b:a 96k -movflags +faststart assets/video/sad-river-mobile.mp4
 ```
 
 ### 3. 图片
@@ -231,7 +242,7 @@ ffmpeg -i "D:\作品\11月12日.mp4" `
 
 - 仓库：`chenchenwwww/yangziyi-portfolio`（public）
 - 发布源：`main` 分支根目录，站点里放了 `.nojekyll`
-- `assets/video/huanqi.mp4`（15:14 正片）被 `.gitignore` 排除，只留在本地，仓库体积约 72 MB
+- `assets/video/huanqi.mp4`（15:14 正片）被 `.gitignore` 排除，只留在本地，仓库体积约 61 MB
 
 改完内容后重新发布（这台机器没有 git，走 GitHub API 推）：
 
@@ -269,7 +280,7 @@ Framework Preset 选 **Other**，输出目录留空。
 
 - `resume.html` 里的作品集链接已换成公网地址，PDF 已重导
 - `index.html` 的 `og:image` 和 `canonical` 已换成完整地址
-- 视频约 72 MB（已排除未引用的 15:14 正片），Pages 能放
+- 视频约 61 MB（已排除未引用的 15:14 正片），Pages 能放
 
 ---
 
